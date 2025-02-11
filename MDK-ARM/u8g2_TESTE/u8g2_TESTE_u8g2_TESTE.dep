@@ -1,6 +1,6 @@
 Dependencies for Project 'u8g2_TESTE', Target 'u8g2_TESTE': (DO NOT MODIFY !)
 F (startup_stm32f103xb.s)(0x67A9FE8F)(--cpu Cortex-M3 -g --apcs=interwork -I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32F10X_MD SETA 1"--list startup_stm32f103xb.lst --xref -o u8g2_teste\startup_stm32f103xb.o --depend u8g2_teste\startup_stm32f103xb.d)
-F (../Core/Src/main.c)(0x67AB9875)(--c99 -c --cpu Cortex-M3 -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\u8g2 -I ../Drivers/STM32F1xx_HAL_Driver/Src-I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o u8g2_teste\main.o --omf_browse u8g2_teste\main.crf --depend u8g2_teste\main.d)
+F (../Core/Src/main.c)(0x67ABAFC8)(--c99 -c --cpu Cortex-M3 -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\u8g2 -I ../Drivers/STM32F1xx_HAL_Driver/Src-I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o u8g2_teste\main.o --omf_browse u8g2_teste\main.crf --depend u8g2_teste\main.d)
 I (../Core/Inc/main.h)(0x67A9FE8D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x677ECDEC)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x67A5FFCD)
@@ -31,6 +31,7 @@ I (..\u8g2\u8g2.h)(0x67AB8FEC)
 I (..\u8g2\u8x8.h)(0x67915AE4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x588C2C04)
 I (C:\Keil_v5\ARM\ARMCC\include\limits.h)(0x588C2C04)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588C2C04)
 F (../Core/Src/stm32f1xx_it.c)(0x679B931E)(--c99 -c --cpu Cortex-M3 -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\u8g2 -I ../Drivers/STM32F1xx_HAL_Driver/Src-I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o u8g2_teste\stm32f1xx_it.o --omf_browse u8g2_teste\stm32f1xx_it.crf --depend u8g2_teste\stm32f1xx_it.d)
 I (../Core/Inc/main.h)(0x67A9FE8D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x677ECDEC)
@@ -499,7 +500,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C2C04)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x588C2C04)
 I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x588C2C04)
 I (C:\Keil_v5\ARM\ARMCC\include\limits.h)(0x588C2C04)
-F (..\u8g2\u8g2_d_setup.c)(0x67AB92BE)(--c99 -c --cpu Cortex-M3 -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\u8g2 -I ../Drivers/STM32F1xx_HAL_Driver/Src-I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o u8g2_teste\u8g2_d_setup.o --omf_browse u8g2_teste\u8g2_d_setup.crf --depend u8g2_teste\u8g2_d_setup.d)
+F (..\u8g2\u8g2_d_setup.c)(0x67ABA771)(--c99 -c --cpu Cortex-M3 -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ..\u8g2 -I ../Drivers/STM32F1xx_HAL_Driver/Src-I.\RTE\_u8g2_TESTE-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.4.1\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_MD -DUSE_HAL_DRIVER -DSTM32F103xB-o u8g2_teste\u8g2_d_setup.o --omf_browse u8g2_teste\u8g2_d_setup.crf --depend u8g2_teste\u8g2_d_setup.d)
 I (..\u8g2\u8g2.h)(0x67AB8FEC)
 I (..\u8g2\u8x8.h)(0x67915AE4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C2C04)

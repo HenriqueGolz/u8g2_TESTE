@@ -3859,7 +3859,7 @@ void u8g2_Setup_st7920_s_128x64_f2(u8g2_t *u8g2, const u8g2_cb_t *rotation, u8x8
 {
 uint8_t tile_buf_height = 8;
 //uint8_t *buf;
-uint8_t buf[300 + 1024];
+uint8_t buf[1500];
 u8g2_SetupDisplay(u8g2, u8x8_d_st7920_128x64, u8x8_cad_st7920_spi, byte_cb, gpio_and_delay_cb);
 //buf = u8g2_m_16_8_f(&tile_buf_height);
 u8g2_SetupBuffer(u8g2, buf, tile_buf_height, u8g2_ll_hvline_horizontal_right_lsb, rotation);

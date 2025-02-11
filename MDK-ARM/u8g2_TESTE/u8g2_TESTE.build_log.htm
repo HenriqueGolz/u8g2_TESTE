@@ -28,17 +28,19 @@ Project File Date:  02/11/2025
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'u8g2_TESTE'
 compiling main.c...
-../Core/Src/main.c(318): warning:  #177-D: variable "byte"  was declared but never referenced
+../Core/Src/main.c(384): warning:  #177-D: variable "byte"  was declared but never referenced
     uint8_t byte;
-../Core/Src/main.c(319): warning:  #177-D: variable "data"  was declared but never referenced
+../Core/Src/main.c(385): warning:  #177-D: variable "data"  was declared but never referenced
     uint8_t *data;
-../Core/Src/main.c(75): warning:  #177-D: variable "bola"  was declared but never referenced
-  static unsigned char bola[9][20] = {
-../Core/Src/main.c: 3 warnings, 0 errors
+../Core/Src/main.c(452): warning:  #223-D: function "sprintf" declared implicitly
+  		sprintf(acumulada_str, "Acumulada: %dL", acumulada);
+../Core/Src/main.c(149): warning:  #177-D: variable "contra_seta"  was declared but never referenced
+  static unsigned char contra_seta[] = {
+../Core/Src/main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=7844 RO-data=1480 RW-data=16 ZI-data=1888  
+Program Size: Code=9156 RO-data=1480 RW-data=656 ZI-data=1888  
 FromELF: creating hex file...
-"u8g2_TESTE\u8g2_TESTE.axf" - 0 Error(s), 3 Warning(s).
+"u8g2_TESTE\u8g2_TESTE.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,7 +63,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

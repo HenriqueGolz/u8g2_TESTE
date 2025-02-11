@@ -30,3 +30,4 @@ u8g2_teste\main.o: ..\u8g2\u8g2.h
 u8g2_teste\main.o: ..\u8g2\u8x8.h
 u8g2_teste\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 u8g2_teste\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+u8g2_teste\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
