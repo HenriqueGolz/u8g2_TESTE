@@ -85,7 +85,9 @@ bool editMax = false;
 bool editMin = false;
 unsigned long blink = 0;
 
-
+//Variáveis lógica
+float valorMax;
+float valorMin;
 
 //BITMAPS:
 static unsigned char bola[9][20] = {
@@ -329,9 +331,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -340,12 +339,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : LED_Pin */
-  GPIO_InitStruct.Pin = LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI1_CS_Pin */
   GPIO_InitStruct.Pin = SPI1_CS_Pin;
@@ -354,8 +347,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SPI1_CS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD_RESET_Pin PB11 */
-  GPIO_InitStruct.Pin = LCD_RESET_Pin|GPIO_PIN_11;
+  /*Configure GPIO pins : LCD_RESET_Pin */
+  GPIO_InitStruct.Pin = LCD_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -420,7 +413,7 @@ void draw(u8g2_t *u8g2)
 	static bool downtoup = true;
 	static unsigned long update_ii;
 	
-	//Variaveis temporarias:
+//Variaveis temporarias:
 	int acumulada = 99000, inst = 2;
 	u8g2_ClearBuffer(u8g2);
 	u8g2_SetFont(u8g2, u8g2_font_6x10_tr);
@@ -438,23 +431,24 @@ void draw(u8g2_t *u8g2)
 	}
 		u8g2_DrawXBM(u8g2, 118, 54, 10, 10, bola[ii]);
 	
-//Página 1
-	if (currentPage == 1){
 //Logo Labsolda
 		u8g2_DrawXBM(u8g2, 113, 0, 15, 11, labsolda);
+	
+//Página 1
+	if (currentPage == 1){
 
-//Acumulada e instantanea
+	//Acumulada e instantanea
 		u8g2_DrawStr(u8g2, 3, 8, "Vazao");
 		//Acumulada
-		char acumulada_str[20];
-		sprintf(acumulada_str, "Acumulada: %dL", acumulada);
-		u8g2_DrawStr(u8g2, 5, 20, acumulada_str);
+		char acumuladaStr[20];
+		sprintf(acumuladaStr, "Acumulada: %dL", acumulada);
+		u8g2_DrawStr(u8g2, 5, 20, acumuladaStr);
 		//Instantanea
-		char instantanea_str[20];
-		sprintf(instantanea_str, "Instantanea: %dL/s", inst);
-		u8g2_DrawStr(u8g2, 5, 32, instantanea_str);
+		char instantaneaStr[20];
+		sprintf(instantaneaStr, "Instantanea: %dL/s", inst);
+		u8g2_DrawStr(u8g2, 5, 32, instantaneaStr);
 		
-//Argonio ou CO2
+	//Argonio ou CO2
 		u8g2_DrawStr(u8g2, 3, 46, "Gas: ");
 		if (gas == 0){
 			u8g2_DrawStr(u8g2, 3, 76, "CO2");
@@ -462,10 +456,10 @@ void draw(u8g2_t *u8g2)
 			u8g2_DrawStr(u8g2, 3, 76, "Argonio");
 		}
 			
-//Configuracao
+	//Configuracao
 			u8g2_DrawStr(u8g2, 3, 60, "Configuracoes");
 
-//Chamada de bitmaps para o menu:
+	//Chamada de bitmaps para o menu:
 		//Acumulada
 		if (item_selecionado == 0){u8g2_DrawXBM(u8g2, 2, 11, 126, 12, acumulada_selecao);}
 
@@ -486,12 +480,67 @@ void draw(u8g2_t *u8g2)
 			u8g2_DrawXBM(u8g2, 0, 51, 85, 12, caixa_selecao);
 			u8g2_DrawXBM(u8g2, 86, 54, 7, 5, seta); //Seta do menu
 		}
-	} //Fim primeira pagina
+	} //Fim pagina 1
 
+	
 //Pagina 2
 	else if (currentPage == 2){
-	
-	}
+		
+	//Voltar
+		u8g2_DrawStr(u8g2, 3, 57, "Voltar");
+		
+	//Minimo
+		char minStr[20];
+		sprintf(minStr, "Maximo: %.1f", valorMin);
+		u8g2_DrawStr(u8g2, 3, 35, minStr);
+		
+	//Maximo
+		char maxStr[20];
+		sprintf(maxStr, "Maximo: %.1f", valorMax);
+		u8g2_DrawStr(u8g2, 3, 57, maxStr);
+
+	//Chamada de bitmaps para o menu:
+		//Voltar
+		if (item_selecionado == 2){
+			u8g2_DrawXBM(u8g2, 0, 48, 55, 12, co2_selecao);
+			u8g2_DrawXBM(u8g2, 56, 51, 7, 5, seta);
+		}
+		
+		//Minimo caixa de selecao
+		else if (item_selecionado == 1){
+			u8g2_DrawXBM(u8g2, 0, 26, 85, 12, caixa_selecao);
+		}
+		
+		//Maximo caixa de selecao
+		else if (item_selecionado == 0){
+			u8g2_DrawXBM(u8g2, 0, 6, 85, 12, caixa_selecao);
+		}
+		
+		//Minimo seta de selecao
+		if (!editMax && item_selecionado == 0){
+			u8g2_DrawXBM(u8g2, 86, 9, 7, 5, seta);
+		} else if (editMax) {
+			if (HAL_GetTick() - blink <= 1000){
+				u8g2_DrawXBM(u8g2, 86, 9, 7, 5, seta);
+			} 
+			else if (HAL_GetTick() - blink >= 1400){
+				blink = HAL_GetTick();
+			}
+		}
+		
+		//Maximo seta de selecao
+		if (!editMin && item_selecionado == 1){
+			u8g2_DrawXBM(u8g2, 86, 29, 7, 5, seta);
+		} else if (editMin) {
+			if (HAL_GetTick() - blink <= 1000){
+				u8g2_DrawXBM(u8g2, 86, 29, 7, 5, seta);
+			} 
+			else if (HAL_GetTick() - blink >= 1400){
+				blink = HAL_GetTick();
+			}
+		}
+			
+	}//Fim pagina 2
 		
 //Envia buffer
 	u8g2_SendBuffer(u8g2);
