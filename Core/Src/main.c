@@ -22,32 +22,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "u8g2.h"
-
-/* USER CODE END Includes */
-/* USER CODE BEGIN Header */
-/**
-  **********
-  * @file           : main.c
-  * @brief          : Main program body
-  **********
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  **********
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-#include "u8g2.h"
 #include <stdbool.h>
 
 /* USER CODE END Includes */
@@ -73,21 +47,22 @@ SPI_HandleTypeDef hspi1;
 /* USER CODE BEGIN PV */
 u8g2_t u8g2;
 
-//Variáveis para o display:
-int ii = 0;
-int i = 0;
-int item_selecionado = 0; // 0 = acumulada; 1 = gas; 2 = configuracoes. || 0 max; 1 min; 2 voltar.
-int gas = 0;
-unsigned long select_tempo = 0;
-bool select_pressionado = false;
-int currentPage = 1;
+//Botoes
+bool buttonUp = false; //menu e callback
+bool buttonSelect = false; //menu e callback
+bool buttonDown = false; //menu e callback
+
+//Variáveis para o menu e display:
+int itemSelecionado = 0; // 0 = acumulada; 1 = gas; 2 = configuracoes. || 0 max; 1 min; 2 voltar.
+int gas = 0; //menu e display
+int currentPage = 1; //menu e display
 bool editMax = false;
 bool editMin = false;
-unsigned long blink = 0;
 
 //Variáveis lógica
 float valorMax;
 float valorMin;
+int acumulada = 99000, inst = 2;
 
 //BITMAPS:
 static unsigned char bola[9][20] = {
@@ -148,8 +123,6 @@ static unsigned char labsolda[] = {
 static unsigned char seta[] = {
    0x0c, 0x06, 0x7f, 0x06, 0x0c };
 
-static unsigned char contra_seta[] = {
-   0x7f, 0x7f, 0x7f, 0x7f, 0x7f };
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -159,7 +132,8 @@ static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 uint8_t u8g2_gpio_and_delay_stm32(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t msg,U8X8_UNUSED uint8_t arg_int, U8X8_UNUSED void *arg_ptr);
 uint8_t u8x8_byte_4wire_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr);
-void draw(u8g2_t *u8g2);
+void display(u8g2_t *u8g2);
+void logicaMenu(void);
 
 /* USER CODE END PFP */
 
@@ -214,20 +188,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		/*
-		u8g2_ClearBuffer(&u8g2);
-		//u8g2_SetFontMode(&u8g2, 1);
-		//u8g2_SetFontDirection(&u8g2, 0);
-		u8g2_SetFont(&u8g2, u8g2_font_6x10_tf);
-		u8g2_DrawStr(&u8g2, 0, 10, "Hello STM32!");
-		
-		u8g2_SendBuffer(&u8g2);
-		*/
-		//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SP11_CS_Pin, GPIO_PIN_SET);
+		static unsigned long drawDelay = 0;
+		logicaMenu();
+		if (HAL_GetTick() - drawDelay >= 200){display(&u8g2);}
 
-		draw(&u8g2);
-		HAL_Delay(200);
-		//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SP11_CS_Pin, GPIO_PIN_RESET);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -272,7 +236,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_PLLCLK, RCC_MCODIV_1);
 }
 
 /**
@@ -331,34 +294,43 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LCD_RESET_Pin|SPI1_CS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
-
-
-  /*Configure GPIO pin : SPI1_CS_Pin */
-  GPIO_InitStruct.Pin = SPI1_CS_Pin;
+  /*Configure GPIO pin : LED_Pin */
+  GPIO_InitStruct.Pin = LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SPI1_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LCD_RESET_Pin */
-  GPIO_InitStruct.Pin = LCD_RESET_Pin;
+  /*Configure GPIO pins : LCD_RESET_Pin SPI1_CS_Pin */
+  GPIO_InitStruct.Pin = LCD_RESET_Pin|SPI1_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LCD_DOWN_Pin */
+  GPIO_InitStruct.Pin = LCD_DOWN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LCD_DOWN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LCD_SELECT_Pin LCD_UP_Pin */
+  GPIO_InitStruct.Pin = LCD_SELECT_Pin|LCD_UP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -372,6 +344,25 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+
+	//Botao cima
+	if (HAL_GPIO_ReadPin(LCD_UP_GPIO_Port, LCD_UP_Pin) == GPIO_PIN_RESET){
+		buttonUp = true;
+} else {buttonUp = false;}
+
+	//Botao select
+	if (HAL_GPIO_ReadPin(LCD_SELECT_GPIO_Port, LCD_SELECT_Pin) == GPIO_PIN_RESET){
+		buttonSelect = true;
+} else {buttonSelect = false;}
+	
+	//Botao baixo
+	if (HAL_GPIO_ReadPin(LCD_DOWN_GPIO_Port, LCD_DOWN_Pin) == GPIO_PIN_RESET){
+		buttonDown = true;
+} else {buttonDown = false;}
+}
+
 uint8_t u8x8_byte_4wire_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
   uint8_t byte;
@@ -408,28 +399,30 @@ uint8_t u8g2_gpio_and_delay_stm32(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED uint8_t 
     return 1;
 }
 
-void draw(u8g2_t *u8g2)
+void display(u8g2_t *u8g2)
 {
+//Variaveis para o display
+	static int frameBola = 0;
 	static bool downtoup = true;
-	static unsigned long update_ii;
+	static unsigned long updateFrameBola = 0;
+	static unsigned long blink = 0;
 	
-//Variaveis temporarias:
-	int acumulada = 99000, inst = 2;
+//Configuracao do display
 	u8g2_ClearBuffer(u8g2);
 	u8g2_SetFont(u8g2, u8g2_font_6x10_tr);
 	u8g2_SetBitmapMode(u8g2, 1);
 	
 //Animacao bola
-	if (HAL_GetTick() - update_ii >= 200) {
-	ii += (downtoup ? 1 : -1);
-		if (ii >= 8) {
+	if (HAL_GetTick() - updateFrameBola >= 200) {
+	frameBola += (downtoup ? 1 : -1);
+		if (frameBola >= 8) {
 			downtoup = false;
-      } else if (ii <= 0) {
+      } else if (frameBola <= 0) {
 			downtoup = true;
       }
-	update_ii = HAL_GetTick();
+	updateFrameBola = HAL_GetTick();
 	}
-		u8g2_DrawXBM(u8g2, 118, 54, 10, 10, bola[ii]);
+		u8g2_DrawXBM(u8g2, 118, 54, 10, 10, bola[frameBola]);
 	
 //Logo Labsolda
 		u8g2_DrawXBM(u8g2, 113, 0, 15, 11, labsolda);
@@ -451,9 +444,9 @@ void draw(u8g2_t *u8g2)
 	//Argonio ou CO2
 		u8g2_DrawStr(u8g2, 3, 46, "Gas: ");
 		if (gas == 0){
-			u8g2_DrawStr(u8g2, 3, 76, "CO2");
+			u8g2_DrawStr(u8g2, 33, 46, "CO2");
 		} else {
-			u8g2_DrawStr(u8g2, 3, 76, "Argonio");
+			u8g2_DrawStr(u8g2, 33, 46, "Argonio");
 		}
 			
 	//Configuracao
@@ -461,10 +454,10 @@ void draw(u8g2_t *u8g2)
 
 	//Chamada de bitmaps para o menu:
 		//Acumulada
-		if (item_selecionado == 0){u8g2_DrawXBM(u8g2, 2, 11, 126, 12, acumulada_selecao);}
+		if (itemSelecionado == 0){u8g2_DrawXBM(u8g2, 2, 11, 126, 12, acumulada_selecao);}
 
 		//Gas
-		else if (item_selecionado == 1){
+		else if (itemSelecionado == 1){
 			if (gas == 0) {
 				u8g2_DrawXBM(u8g2, 0, 37, 55, 12, co2_selecao);
 				u8g2_DrawXBM(u8g2, 56, 40, 7, 5, seta); //Seta do menu
@@ -476,7 +469,7 @@ void draw(u8g2_t *u8g2)
     }
 		
 		//Configuracao
-		else if (item_selecionado == 2){
+		else if (itemSelecionado == 2){
 			u8g2_DrawXBM(u8g2, 0, 51, 85, 12, caixa_selecao);
 			u8g2_DrawXBM(u8g2, 86, 54, 7, 5, seta); //Seta do menu
 		}
@@ -491,33 +484,33 @@ void draw(u8g2_t *u8g2)
 		
 	//Minimo
 		char minStr[20];
-		sprintf(minStr, "Maximo: %.1f", valorMin);
+		sprintf(minStr, "Minimo: %.1f", valorMin);
 		u8g2_DrawStr(u8g2, 3, 35, minStr);
 		
 	//Maximo
 		char maxStr[20];
 		sprintf(maxStr, "Maximo: %.1f", valorMax);
-		u8g2_DrawStr(u8g2, 3, 57, maxStr);
+		u8g2_DrawStr(u8g2, 3, 15, maxStr);
 
 	//Chamada de bitmaps para o menu:
 		//Voltar
-		if (item_selecionado == 2){
+		if (itemSelecionado == 2){
 			u8g2_DrawXBM(u8g2, 0, 48, 55, 12, co2_selecao);
 			u8g2_DrawXBM(u8g2, 56, 51, 7, 5, seta);
 		}
 		
 		//Minimo caixa de selecao
-		else if (item_selecionado == 1){
+		else if (itemSelecionado == 1){
 			u8g2_DrawXBM(u8g2, 0, 26, 85, 12, caixa_selecao);
 		}
 		
 		//Maximo caixa de selecao
-		else if (item_selecionado == 0){
+		else if (itemSelecionado == 0){
 			u8g2_DrawXBM(u8g2, 0, 6, 85, 12, caixa_selecao);
 		}
 		
-		//Minimo seta de selecao
-		if (!editMax && item_selecionado == 0){
+		//Maximo seta de selecao
+		if (!editMax && itemSelecionado == 0){
 			u8g2_DrawXBM(u8g2, 86, 9, 7, 5, seta);
 		} else if (editMax) {
 			if (HAL_GetTick() - blink <= 1000){
@@ -528,8 +521,8 @@ void draw(u8g2_t *u8g2)
 			}
 		}
 		
-		//Maximo seta de selecao
-		if (!editMin && item_selecionado == 1){
+		//Minimo seta de selecao
+		if (!editMin && itemSelecionado == 1){
 			u8g2_DrawXBM(u8g2, 86, 29, 7, 5, seta);
 		} else if (editMin) {
 			if (HAL_GetTick() - blink <= 1000){
@@ -544,6 +537,115 @@ void draw(u8g2_t *u8g2)
 		
 //Envia buffer
 	u8g2_SendBuffer(u8g2);
+}
+
+void logicaMenu(void)
+{
+	static unsigned long tempoItemUp = 0;
+	static unsigned long tempoItemDown = 0;
+	static unsigned long tempoButtonSelect = 0;
+	static unsigned long tempoEditMax = 0;
+	static unsigned long tempoEditMin = 0;
+	static unsigned long tempoAcumuladaRst = 0;
+	
+//Pagina 1
+	if (currentPage == 1)
+	{
+	//Mover selecao do menu	
+	if (buttonUp && (HAL_GetTick() - tempoItemUp >= 100)){itemSelecionado -= 1; tempoItemUp = HAL_GetTick();}
+	if (buttonDown && (HAL_GetTick() - tempoItemDown >= 100)){itemSelecionado += 1; tempoItemDown = HAL_GetTick();}	
+		
+	//Selecionar
+		if (buttonSelect && (HAL_GetTick() - tempoButtonSelect >= 100)){
+		//Gas
+			if (itemSelecionado == 1){
+				if (gas == 0){gas = 1;} else {gas = 0;}
+			}
+		//Configuracao
+			if (itemSelecionado == 2){currentPage = 2; itemSelecionado = 0;}
+			tempoButtonSelect = HAL_GetTick();
+		}
+	
+	//Acumulada (zera apos 1.5s pressionado)
+		if (itemSelecionado == 0)
+		{
+			if (buttonSelect)
+			{
+				if (tempoAcumuladaRst == 0){tempoAcumuladaRst = HAL_GetTick();}
+				else if (HAL_GetTick() - tempoAcumuladaRst >= 1500){acumulada = 0.0; tempoAcumuladaRst = 0;}
+			} else {tempoAcumuladaRst = 0;}
+		}
+		
+	}//Fim pagina 1
+	
+//Pagina 2
+	else if (currentPage == 2){
+	//Mover selecao menu (considerando editMax e editMin)
+		if (buttonUp && HAL_GetTick() - tempoItemUp >= 100 && !editMin && !editMax){itemSelecionado -= 1; tempoItemUp = HAL_GetTick();}
+    if (buttonDown && HAL_GetTick() - tempoItemDown >= 100 && !editMin && !editMax){itemSelecionado += 1; tempoItemDown = HAL_GetTick();}
+		
+	//Voltar
+		if (itemSelecionado == 2 && buttonSelect){currentPage = 1; itemSelecionado = 0;}
+	
+	//Editar valor maximo
+		//Habilita edicao
+		if (itemSelecionado == 0){
+			if (buttonSelect){
+				if (tempoButtonSelect == 0){
+					editMax = !editMax; 
+					tempoButtonSelect = HAL_GetTick();
+				}
+			} else {tempoButtonSelect = 0;}
+		}
+		//Edita o valor
+		if (editMax){
+				if (buttonUp && valorMax < 9.99){	//Aumenta valor
+						if (tempoItemUp == 0){tempoItemUp = HAL_GetTick();}
+						else if (HAL_GetTick() - tempoItemUp >= 500 && valorMax < 9.49){valorMax += 0.5;}
+						if (HAL_GetTick() - tempoEditMax >= 100 && HAL_GetTick() - tempoItemUp < 500) {valorMax += 0.1; tempoEditMax = HAL_GetTick();}
+						tempoEditMax = HAL_GetTick();
+						
+				} else if (buttonDown && valorMax > (valorMin + 0.01)) // Diminui valor
+				{
+					if (tempoItemDown == 0){tempoItemDown = HAL_GetTick();}
+					else if (HAL_GetTick() - tempoItemDown >= 500 && valorMax > 0.51){valorMax -= 0.5;}
+					if (HAL_GetTick() - tempoEditMax >= 100 && HAL_GetTick() - tempoItemDown < 500) {valorMax -= 0.1; tempoEditMax = HAL_GetTick();}
+					tempoEditMax = HAL_GetTick();
+				} else {tempoItemUp = 0; tempoItemDown = 0;}
+		} 
+		
+	//Editar valor minimo
+		//Habilita edicao
+		if (itemSelecionado == 1){
+			if (buttonSelect){
+				if (tempoButtonSelect == 0){
+					editMin = !editMin; 
+					tempoButtonSelect = HAL_GetTick();
+				}
+			} else {tempoButtonSelect = 0;}
+		}
+		//Edita o valor
+		if (editMin){
+				if (buttonUp && valorMin < (valorMax - 0.01)){ // Aumenta valor
+					if (tempoItemUp == 0){tempoItemUp = HAL_GetTick();}
+					else if (HAL_GetTick() - tempoItemUp >= 500 && valorMin < (valorMax - 0.51)){valorMin += 0.5;}
+					if (HAL_GetTick() - tempoEditMin >= 100 && HAL_GetTick() - tempoItemUp < 500) {valorMin += 0.1; tempoEditMin = HAL_GetTick();}
+					tempoEditMin = HAL_GetTick();
+				
+				}
+				else if (buttonDown && valorMin > 0.06){ // Diminui valor
+					if (tempoItemDown == 0){tempoItemDown = HAL_GetTick();}
+					else if (HAL_GetTick() - tempoItemDown >= 500 && valorMin > 0.51){valorMin -= 0.5;}
+					if (HAL_GetTick() - tempoEditMin >= 100 && HAL_GetTick() - tempoItemDown < 500) {valorMin -= 0.1; tempoEditMin = HAL_GetTick();}
+					tempoEditMin = HAL_GetTick();
+					
+				} else {tempoItemUp = 0; tempoItemDown = 0;}
+		}		
+
+	}//Fim da pagina 2
+	
+	if (itemSelecionado >= 3){itemSelecionado = 0;}
+	else if (itemSelecionado <= -1){itemSelecionado = 2;}
 }
 
 /* USER CODE END 4 */
