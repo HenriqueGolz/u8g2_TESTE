@@ -3,6 +3,7 @@
 "u8g2_teste\main.o"
 "u8g2_teste\stm32f1xx_it.o"
 "u8g2_teste\stm32f1xx_hal_msp.o"
+"u8g2_teste\display_u8g2.o"
 "u8g2_teste\stm32f1xx_hal_gpio_ex.o"
 "u8g2_teste\stm32f1xx_hal_spi.o"
 "u8g2_teste\stm32f1xx_hal.o"
