@@ -118,7 +118,7 @@ int main(void)
   {
 		static unsigned long drawDelay = 0;
 		logicaMenu(buttonUp, buttonSelect, buttonDown);
-		if (HAL_GetTick() - drawDelay >= 200){display(&u8g2);}
+		if (HAL_GetTick() - drawDelay >= 200){draw(&u8g2);}
 
     /* USER CODE END WHILE */
 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [u8g2_TESTE\u8g2_TESTE.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image u8g2_TESTE\u8g2_TESTE.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Mon Feb 17 11:11:24 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Mon Feb 17 13:37:17 2025
 <BR><P>
 <H3>Maximum Stack Usage =       1552 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -405,7 +405,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sputc
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[56]"></a>_printf_int_dec</STRONG> (Thumb, 104 bytes, Stack size 24 bytes, _printf_dec.o(.text))
@@ -685,7 +685,7 @@ Global Symbols
 <P><STRONG><a name="[81]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f1xx_hal.o(i.HAL_GetTick))
 <BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFlagStateUntilTimeout
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;logicaMenu
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Transmit
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
@@ -857,17 +857,17 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 
-<P><STRONG><a name="[9d]"></a>display</STRONG> (Thumb, 812 bytes, Stack size 80 bytes, display_u8g2.o(i.display))
+<P><STRONG><a name="[9d]"></a>draw</STRONG> (Thumb, 812 bytes, Stack size 80 bytes, display_u8g2.o(i.draw))
 <BR><BR>[Stack]<UL><LI>Max Depth = 300 + Unknown Stack Size
-<LI>Call Chain = display &rArr; u8g2_DrawStr &rArr; u8g2_draw_string &rArr; u8g2_DrawGlyph &rArr; u8g2_font_draw_glyph &rArr; u8g2_font_decode_glyph &rArr; u8g2_font_decode_len &rArr; u8g2_DrawHVLine &rArr; u8g2_clip_intersection2
+<LI>Call Chain = draw &rArr; u8g2_DrawStr &rArr; u8g2_draw_string &rArr; u8g2_DrawGlyph &rArr; u8g2_font_draw_glyph &rArr; u8g2_font_decode_glyph &rArr; u8g2_font_decode_len &rArr; u8g2_DrawHVLine &rArr; u8g2_clip_intersection2
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_SetFont
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_SetBitmapMode
+<BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_SendBuffer
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawXBM
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawStr
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_ClearBuffer
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_SetBitmapMode
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawXBM
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_SetFont
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawStr
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -896,7 +896,7 @@ Global Symbols
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_InitDisplay
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_Setup_st7920_s_128x64_f2
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;logicaMenu
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -911,7 +911,7 @@ Global Symbols
 <P><STRONG><a name="[9e]"></a>u8g2_ClearBuffer</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, u8g2_buffer.o(i.u8g2_ClearBuffer))
 <BR><BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[af]"></a>u8g2_DrawGlyph</STRONG> (Thumb, 96 bytes, Stack size 24 bytes, u8g2_font.o(i.u8g2_DrawGlyph))
@@ -945,7 +945,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_draw_string
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[a1]"></a>u8g2_DrawXBM</STRONG> (Thumb, 84 bytes, Stack size 40 bytes, u8g2_bitmap.o(i.u8g2_DrawXBM))
@@ -954,7 +954,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawHXBM
 <LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_IsIntersection
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[b4]"></a>u8g2_IsIntersection</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, u8g2_intersection.o(i.u8g2_IsIntersection))
@@ -963,8 +963,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_is_intersection_decision_tree
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawXBM
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_apply_clip_window
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_DrawHXBM
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_apply_clip_window
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_font_decode_glyph
 </UL>
 
@@ -974,11 +974,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_RefreshDisplay
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_send_buffer
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[a0]"></a>u8g2_SetBitmapMode</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, u8g2_bitmap.o(i.u8g2_SetBitmapMode))
-<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[9f]"></a>u8g2_SetFont</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, u8g2_font.o(i.u8g2_SetFont))
@@ -987,7 +987,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_read_font_info
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8g2_UpdateRefHeight
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[bd]"></a>u8g2_SetFontPosBaseline</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, u8g2_font.o(i.u8g2_SetFontPosBaseline))
@@ -1266,12 +1266,12 @@ Global Symbols
 <P><STRONG><a name="[d7]"></a>u8x8_d_st7920_common</STRONG> (Thumb, 182 bytes, Stack size 32 bytes, u8x8_d_st7920.o(i.u8x8_d_st7920_common))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = u8x8_d_st7920_common &rArr; u8x8_cad_SendSequence &rArr; u8x8_cad_SendData
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_StartTransfer
+<BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_d_helper_display_init
+<LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_StartTransfer
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_SendSequence
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_SendData
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_SendCmd
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_EndTransfer
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_d_helper_display_init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_d_st7920_128x64
 </UL>
@@ -1282,8 +1282,8 @@ Global Symbols
 <P><STRONG><a name="[d5]"></a>u8x8_gpio_call</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, u8x8_gpio.o(i.u8x8_gpio_call))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = u8x8_gpio_call
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_SendSequence
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_d_helper_display_init
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_d_helper_display_init
+<LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_SendSequence
 <LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u8x8_cad_st7920_spi
 </UL>
 
@@ -1378,7 +1378,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_f2d
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;logicaMenu
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;display
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;draw
 </UL>
 
 <P><STRONG><a name="[e9]"></a>_f2d</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, f2d.o(x$fpl$f2d), UNUSED)
