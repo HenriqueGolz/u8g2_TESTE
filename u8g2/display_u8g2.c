@@ -68,6 +68,21 @@ static unsigned char caixa_selecao[] = {
    0x00, 0x18, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
    0x0f, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07 };
 
+static unsigned char reset_selecao[] = {
+   0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f,
+   0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x80, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0x01, 0x00, 0x00,
+   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x01, 0xfe, 0xff,
+   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0xfc,
+   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f, 0x00 };
+
 static unsigned char labsolda[] = {
    0xe0, 0x03, 0xf0, 0x07, 0x78, 0x08, 0x3f, 0x71, 0x21, 0x43, 0x61, 0x46,
    0xc1, 0x44, 0x87, 0x7c, 0x08, 0x0e, 0xf0, 0x07, 0xe0, 0x03 };
@@ -158,41 +173,50 @@ void draw(u8g2_t *u8g2)
 	else if (currentPage == 2){
 		
 	//Voltar
-		u8g2_DrawStr(u8g2, 3, 57, "Voltar");
+		u8g2_DrawStr(u8g2, 3, 60, "Voltar");
 		
 	//Minimo
 		char minStr[20];
 		sprintf(minStr, "Minimo: %.1f", valorMin);
-		u8g2_DrawStr(u8g2, 3, 35, minStr);
+		u8g2_DrawStr(u8g2, 3, 27, minStr);
 		
 	//Maximo
 		char maxStr[20];
 		sprintf(maxStr, "Maximo: %.1f", valorMax);
-		u8g2_DrawStr(u8g2, 3, 15, maxStr);
+		u8g2_DrawStr(u8g2, 3, 9, maxStr);
+		
+	//Resetar configuracoes
+		u8g2_DrawStr(u8g2, 3, 44, "Resetar configuracoes");//7 de altura
 
 	//Chamada de bitmaps para o menu:
 		//Voltar
 		if (itemSelecionado == 2){
-			u8g2_DrawXBM(u8g2, 0, 48, 55, 12, co2_selecao);
-			u8g2_DrawXBM(u8g2, 56, 51, 7, 5, seta);
+			u8g2_DrawXBM(u8g2, 0, 51, 55, 12, co2_selecao);
+			u8g2_DrawXBM(u8g2, 56, 54, 7, 5, seta);
 		}
 		
 		//Minimo caixa de selecao
 		else if (itemSelecionado == 1){
-			u8g2_DrawXBM(u8g2, 0, 26, 85, 12, caixa_selecao);
+			u8g2_DrawXBM(u8g2, 0, 18, 85, 12, caixa_selecao);
 		}
 		
 		//Maximo caixa de selecao
 		else if (itemSelecionado == 0){
-			u8g2_DrawXBM(u8g2, 0, 6, 85, 12, caixa_selecao);
+			u8g2_DrawXBM(u8g2, 0, 0, 85, 12, caixa_selecao);
+		}
+		
+		//Reset config
+		else if (itemSelecionado == 3){
+			u8g2_DrawXBM(u8g2, 0, 35, 97, 12, reset_selecao);
+			u8g2_DrawXBM(u8g2, 98, 38, 7, 5, seta);
 		}
 		
 		//Maximo seta de selecao
 		if (!editMax && itemSelecionado == 0){
-			u8g2_DrawXBM(u8g2, 86, 9, 7, 5, seta);
+			u8g2_DrawXBM(u8g2, 86, 3, 7, 5, seta);
 		} else if (editMax) {
 			if (HAL_GetTick() - blink <= 1000){
-				u8g2_DrawXBM(u8g2, 86, 9, 7, 5, seta);
+				u8g2_DrawXBM(u8g2, 86, 3, 7, 5, seta);
 			} 
 			else if (HAL_GetTick() - blink >= 1400){
 				blink = HAL_GetTick();
@@ -201,10 +225,10 @@ void draw(u8g2_t *u8g2)
 		
 		//Minimo seta de selecao
 		if (!editMin && itemSelecionado == 1){
-			u8g2_DrawXBM(u8g2, 86, 29, 7, 5, seta);
+			u8g2_DrawXBM(u8g2, 86, 21, 7, 5, seta);
 		} else if (editMin) {
 			if (HAL_GetTick() - blink <= 1000){
-				u8g2_DrawXBM(u8g2, 86, 29, 7, 5, seta);
+				u8g2_DrawXBM(u8g2, 86, 21, 7, 5, seta);
 			} 
 			else if (HAL_GetTick() - blink >= 1400){
 				blink = HAL_GetTick();
@@ -325,6 +349,22 @@ void logicaMenu(bool botaocima, bool botaoselect, bool botaobaixo)
 
 	}//Fim da pagina 2
 	
-	if (itemSelecionado >= 3){itemSelecionado = 0;}
+	if (itemSelecionado >= 4){itemSelecionado = 0;}
 	else if (itemSelecionado <= -1){itemSelecionado = 2;}
+}
+
+void atualiza_u8g2(u8g2_t* u8g2, bool botaocima, bool botaoselect, bool botaobaixo, unsigned long* delaydesenho){
+	logicaMenu(botaocima, botaoselect, botaobaixo);
+	if (HAL_GetTick() - *delaydesenho >= 200){draw(u8g2); *delaydesenho = HAL_GetTick();}
+}
+
+void inicializa_u8g2(u8g2_t* u8g2, u8x8_msg_cb hw_spi, u8x8_msg_cb stm32){
+	u8g2_Setup_st7920_s_128x64_f2(u8g2, U8G2_R0, hw_spi, stm32);
+	u8g2_InitDisplay(u8g2);
+	u8g2_SetPowerSave(u8g2, 0);
+	
+	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_RESET);
+	HAL_Delay(100);
+	HAL_GPIO_WritePin(LCD_RESET_GPIO_Port, LCD_RESET_Pin, GPIO_PIN_SET);
+	HAL_Delay(100);
 }
