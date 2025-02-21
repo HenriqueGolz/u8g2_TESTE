@@ -127,15 +127,17 @@ void draw(u8g2_t *u8g2)
 		u8g2_DrawStr(u8g2, 3, 8, "Vazao");
 		//Acumulada
 		char acumuladaStr[20];
-		sprintf(acumuladaStr, "Acumulada: %dL", acumulada);
+		sprintf(acumuladaStr, "Acumulada: %.1fL", valorMax);
 		u8g2_DrawStr(u8g2, 5, 20, acumuladaStr);
 		//Instantanea
 		char instantaneaStr[20];
-		sprintf(instantaneaStr, "Instantanea: %dL/s", inst);
+		sprintf(instantaneaStr, "Instant.: %.1fL/s", valorMin);
 		u8g2_DrawStr(u8g2, 5, 32, instantaneaStr);
 		
 	//Argonio ou CO2
 		u8g2_DrawStr(u8g2, 3, 46, "Gas: ");
+		
+		
 		if (gas == 0){
 			u8g2_DrawStr(u8g2, 33, 46, "CO2");
 		} else {
@@ -178,7 +180,7 @@ void draw(u8g2_t *u8g2)
 	//Minimo
 		char minStr[20];
 		sprintf(minStr, "Minimo: %.1f", valorMin);
-		u8g2_DrawStr(u8g2, 3, 27, minStr);
+		u8g2_DrawStr(u8g2, 3, 21, minStr);
 		
 	//Maximo
 		char maxStr[20];
@@ -186,7 +188,9 @@ void draw(u8g2_t *u8g2)
 		u8g2_DrawStr(u8g2, 3, 9, maxStr);
 		
 	//Resetar configuracoes
-		u8g2_DrawStr(u8g2, 3, 44, "Resetar configuracoes");//7 de altura
+		u8g2_DrawStr(u8g2, 3, 34, "Resetar configs.");//7 de altura
+		
+		u8g2_DrawStr(u8g2, 3, 47, "Salvar configuracoes");
 
 	//Chamada de bitmaps para o menu:
 		//Voltar
@@ -197,7 +201,7 @@ void draw(u8g2_t *u8g2)
 		
 		//Minimo caixa de selecao
 		else if (itemSelecionado == 1){
-			u8g2_DrawXBM(u8g2, 0, 18, 85, 12, caixa_selecao);
+			u8g2_DrawXBM(u8g2, 0, 12, 85, 12, caixa_selecao);
 		}
 		
 		//Maximo caixa de selecao
@@ -207,8 +211,13 @@ void draw(u8g2_t *u8g2)
 		
 		//Reset config
 		else if (itemSelecionado == 3){
-			u8g2_DrawXBM(u8g2, 0, 35, 97, 12, reset_selecao);
-			u8g2_DrawXBM(u8g2, 98, 38, 7, 5, seta);
+			u8g2_DrawXBM(u8g2, 0, 25, 97, 12, reset_selecao);
+			u8g2_DrawXBM(u8g2, 98, 28, 7, 5, seta);
+		}
+		
+		//Salvar config
+		else if (itemSelecionado == 4){
+			u8g2_DrawXBM(u8g2, 0, 38, 97, 12, reset_selecao);
 		}
 		
 		//Maximo seta de selecao
